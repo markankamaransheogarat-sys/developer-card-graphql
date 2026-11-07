@@ -1,0 +1,96 @@
+// ============================================================================
+// Prisma Schema — Senior Backend Digital Business Card (PostgreSQL)
+// Normalized 1:N relational schema with composite B-Tree indexes for O(1)
+// DataLoader batch lookups (`WHERE profile_id IN (...) ORDER BY sort_order ASC`).
+// ============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  id          String       @id @default(uuid())
+  slug        String       @unique @default("primary")
+  name        String
+  title       String
+  description String       @db.Text
+  location    String
+  timezone    String
+  available   Boolean      @default(true)
+  links       SocialLink[]
+  skills      Skill[]
+  experience  Experience[]
+  projects    Project[]
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+
+  @@map("profiles")
+}
+
+model SocialLink {
+  id        String  @id @default(uuid())
+  profileId String  @map("profile_id")
+  platform  String
+  label     String
+  url       String
+  sortOrder Int     @default(0) @map("sort_order")
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId, sortOrder])
+  @@map("social_links")
+}
+
+model Skill {
+  id                 String  @id @default(uuid())
+  profileId          String  @map("profile_id")
+  name               String
+  category           String
+  proficiencyPercent Int     @default(95) @map("proficiency_percent")
+  yearsOfExperience  Float   @default(4.0) @map("years_of_experience")
+  sortOrder          Int     @default(0) @map("sort_order")
+  profile            Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId, sortOrder])
+  @@index([profileId, category])
+  @@map("skills")
+}
+
+model Experience {
+  id           String   @id @default(uuid())
+  profileId    String   @map("profile_id")
+  company      String
+  position     String
+  period       String
+  startDate    String   @map("start_date")
+  endDate      String?  @map("end_date")
+  isCurrent    Boolean  @default(false) @map("is_current")
+  achievements String[]
+  technologies String[]
+  sortOrder    Int      @default(0) @map("sort_order")
+  profile      Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId, sortOrder])
+  @@map("experiences")
+}
+
+model Project {
+  id            String   @id @default(uuid())
+  profileId     String   @map("profile_id")
+  name          String
+  description   String   @db.Text
+  url           String
+  repositoryUrl String   @map("repository_url")
+  techStack     String[] @map("tech_stack")
+  highlights    String[]
+  featured      Boolean  @default(true)
+  sortOrder     Int      @default(0) @map("sort_order")
+  profile       Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId, sortOrder])
+  @@map("projects")
+}
