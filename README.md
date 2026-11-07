@@ -10,8 +10,9 @@
 Backend-приложение **«Цифровая визитка разработчика»** (Digital Business Card API), разработанное на стеке **TypeScript, Node.js, NestJS, Prisma ORM, PostgreSQL, GraphQL (Apollo Server 4 + Apollo Sandbox) и Docker**.
 
 ### 🌐 Живой стенд (Live Demo / Apollo Sandbox):
-- **Apollo Sandbox GraphQL IDE:** **[https://card.404nfd.net/graphql](https://card.404nfd.net/graphql)**
-- **Healthcheck Endpoint:** **[https://card.404nfd.net/health](https://card.404nfd.net/health)**
+- **Apollo Sandbox GraphQL IDE (Cloudflare CDN):** **[https://card.404nfd.net/graphql](https://card.404nfd.net/graphql)**
+- **Прямое зеркало без Cloudflare (для провайдеров РФ без VPN):** **[http://404nfd.net/graphql](http://404nfd.net/graphql)** / **[https://404nfd.net:8443/graphql](https://404nfd.net:8443/graphql)**
+- **Healthcheck Endpoint:** **[https://card.404nfd.net/health](https://card.404nfd.net/health)** ([http://404nfd.net/health](http://404nfd.net/health))
 - **GitHub Repository:** **[https://github.com/markankamaransheogarat-sys/developer-card-graphql](https://github.com/markankamaransheogarat-sys/developer-card-graphql)**
 
 ---
